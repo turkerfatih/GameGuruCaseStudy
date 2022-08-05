@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02758303e5d759a458e9a7b0bf92d54c, type: 3}
+  m_Name: Case1Config
+  m_EditorClassIdentifier: 
+  MinimumMatchCount: 3
+  MaximumMatchCount: 5
+  MinimumGridSize: 3
+  MaximumGridSize: 9
+  TileSize: 1
+  TilePrefab: {fileID: 441879138543862641, guid: f7eaa9b00ca370643823579a63ec2d09, type: 3}
+  TilePrefabPoolSize: 24
+  ItemPrefab: {fileID: 441879138543862641, guid: b5207888c8c553e41a2889b891c7cdaf, type: 3}
+  ItemPrefabPoolSize: 9
