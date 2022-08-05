@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface MatchingFillChecker
+namespace Case1
 {
-    public bool IsFilled { get; }
+    public interface MatchingFillChecker
+    {
+        public bool IsFilled { get; }
     
+    }
 }

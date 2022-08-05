@@ -3,13 +3,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UISliderValueDisplayer : MonoBehaviour
+namespace Case1
 {
-    public Case1Config Config;
-    public TextMeshProUGUI Text;
-    internal Slider slider;
-    public void ValueChanged(Single value)
+    public class UISliderValueDisplayer : MonoBehaviour
     {
-        Text.SetText(value.ToString());
+        public Case1Config Config;
+        public TextMeshProUGUI Text;
+        internal Slider slider;
+        public void ValueChanged(Single value)
+        {
+            Text.SetText(value.ToString());
+        }
     }
 }
