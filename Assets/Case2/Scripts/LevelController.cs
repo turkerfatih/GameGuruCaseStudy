@@ -5,6 +5,7 @@ namespace Case2
 {
     public class LevelController : MonoBehaviour
     {
+        public float ReplayWaitDuration;
         public float PieceWidth;
         public float PieceHeight;
         public float PieceLength;
@@ -86,7 +87,7 @@ namespace Case2
 
         private void OnGameFail()
         {
-            DOVirtual.DelayedCall(5, TriggerReplay);
+            DOVirtual.DelayedCall(ReplayWaitDuration, TriggerReplay);
         }
 
         private void TriggerReplay()

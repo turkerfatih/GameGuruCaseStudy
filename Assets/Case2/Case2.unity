@@ -13712,6 +13712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c108331fda94c4285000944947c22d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ReplayWaitDuration: 3
   PieceWidth: 2.7
   PieceHeight: 0.8
   PieceLength: 3
