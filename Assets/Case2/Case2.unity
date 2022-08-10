@@ -7984,6 +7984,7 @@ MonoBehaviour:
   StackPrevious: {fileID: 809392683}
   PiecePrefab: {fileID: 3912874204538921626, guid: fc625fd668aeb7b4dae0c49fd4e12e41, type: 3}
   FinishLinePrefab: {fileID: 8822058165888743613, guid: 50d59dd24e8b8264b890d8c1d9709931, type: 3}
+  CuttedPieceDestroyDelay: 3
   Gradients:
   - {fileID: 11400000, guid: 40382dd1844919c469deb46c557a987a, type: 2}
   - {fileID: 11400000, guid: 807c67926195ef24ab96137a7b4a91b7, type: 2}
@@ -14754,11 +14755,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4043731920028994848, guid: c3514cfc63363ca45a25a12f4d963a66, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.000000026258462
+      value: 0.000000060351105
       objectReference: {fileID: 0}
     - target: {fileID: 4043731920028994848, guid: c3514cfc63363ca45a25a12f4d963a66, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0000000036068228
+      value: 0.0000000082897404
       objectReference: {fileID: 0}
     - target: {fileID: 4043731920028994848, guid: c3514cfc63363ca45a25a12f4d963a66, type: 3}
       propertyPath: m_LocalRotation.y

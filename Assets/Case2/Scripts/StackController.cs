@@ -15,6 +15,7 @@ namespace Case2
         public Transform StackPrevious;
         public GameObject PiecePrefab;
         public GameObject FinishLinePrefab;
+        public float CuttedPieceDestroyDelay;
         public List<PairGradient> Gradients;
         
         private float spawnXDistance;
@@ -214,6 +215,7 @@ namespace Case2
             body.useGravity = true;
             body.isKinematic = false;
             body.AddForce(new Vector3(cutDirection*param.Length,0,0), ForceMode.Impulse);
+            Destroy(cutPiece.gameObject,CuttedPieceDestroyDelay);
             DOVirtual.DelayedCall(remainingTime, OnPiecePlaced);
         }
 
