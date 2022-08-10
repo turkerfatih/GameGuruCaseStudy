@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f9e5e77d3316104cb8cd9063ae06b85, type: 3}
+  m_Name: GeneratedGradient-49746
+  m_EditorClassIdentifier: 
+  Color: {r: 0.9411765, g: 0.32941177, b: 0.32941177, a: 1}
+  PairGradients:
+  - Pair: {fileID: 11400000, guid: f509df658efbf3d46bef1a023f4df9a9, type: 2}
+    Length: 7
+  - Pair: {fileID: 11400000, guid: 8bb24665cb634114aa5da15327ce4704, type: 2}
+    Length: 6
+  - Pair: {fileID: 11400000, guid: 85a9c2df886e35041b1e1fb3073c0b4e, type: 2}
+    Length: 6
