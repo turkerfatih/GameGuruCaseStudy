@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f9e5e77d3316104cb8cd9063ae06b85, type: 3}
-  m_Name: White
+  m_Name: GeneratedGradient-93162
   m_EditorClassIdentifier: 
   Color: {r: 1, g: 1, b: 1, a: 1}
   PairGradients:

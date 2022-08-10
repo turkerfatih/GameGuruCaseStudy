@@ -34,3 +34,5 @@ MonoBehaviour:
     Length: 8
   - Pair: {fileID: 11400000, guid: 71d8db4a1b644814aa6a48e617569b25, type: 2}
     Length: 8
+  - Pair: {fileID: 11400000, guid: 97a773135faafa642a3145373e92b26e, type: 2}
+    Length: 3
