@@ -26,8 +26,8 @@ namespace Case2
             EventBus.OnGameStart += OnGameStart;
             EventBus.OnGameSuccess += OnSuccess;
             EventBus.OnContinue += OnContinueNewLevel;
+            EventBus.OnGameReplay += OnGameReplay;
         }
-
         private void OnDisable()
         {
             EventBus.OnLevelReady -= OnLevelGenerated;
@@ -37,10 +37,16 @@ namespace Case2
             EventBus.OnGameStart -= OnGameStart;
             EventBus.OnGameSuccess -= OnSuccess;
             EventBus.OnContinue -= OnContinueNewLevel;
+            EventBus.OnGameReplay -= OnGameReplay;
         }
         private void OnGameStart()
         {
             StartButton.SetActive(false);
+        }
+        private void OnGameReplay()
+        {
+            FailPanel.SetActive(false);
+            StartButton.SetActive(true);
         }
 
         private void OnLevelGenerated(LevelParameter levelParameter)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using DG.Tweening.Core;
@@ -11,7 +12,9 @@ namespace Case2
     {
         public AnimationCurve PieceMovementCurve;
         public Transform Stack;
+        public Transform StackPrevious;
         public GameObject PiecePrefab;
+        public GameObject FinishLinePrefab;
         public List<PairGradient> Gradients;
         
         private float spawnXDistance;
@@ -20,30 +23,83 @@ namespace Case2
         private bool running;
         private TweenerCore<Vector3, Vector3, VectorOptions> tween;
         private LevelParameter param;
+        private GameObject finish;
+        private float finishLength;
         private int pieceCount;
         private float colorCount;
         private PairedGradient targetColor;
         private PairGradient sourceColor;
+
+        private void Awake()
+        {
+            finishLength = FinishLinePrefab.GetComponent<MeshRenderer>().bounds.extents.z;
+        }
 
         private void OnEnable()
         {
             EventBus.OnLevelReady += OnLevelReady;
             EventBus.OnGameStart += OnGameStart;
             EventBus.OnGameEnd += OnGameEnd;
+            EventBus.OnGameReplay += OnGameReplay;
+            EventBus.OnGameFail += OnGameFail;
         }
         private void OnDisable()
         {
             EventBus.OnGameStart-= OnGameStart;
             EventBus.OnGameEnd -= OnGameEnd;
             EventBus.OnLevelReady -= OnLevelReady;
+            EventBus.OnGameReplay -= OnGameReplay;
         }
         
         private void OnLevelReady(LevelParameter levelParameter)
         {
-            GetRandomStartingGradient();
-            param = levelParameter;
-            CreateStartingPieces();
+            SetupStack(levelParameter);
         }
+
+        private void SetupStack(LevelParameter levelParameter)
+        {
+            pieceCount = 0;
+            if (Stack.childCount > 1)// previously completed a level
+            {
+                for (int i = Stack.childCount - 1; i >= 0; i--)
+                {
+                    Stack.GetChild(i).SetParent(StackPrevious,true);
+                }
+
+                var previousPos= StackPrevious.localPosition;
+                var gap = finishLength + levelParameter.Length / 2f;
+                previousPos.z -= param.FinalPosition + gap;
+                StackPrevious.localPosition = previousPos;
+                param = levelParameter;
+                currentPiece = CreateStartingPiece(0);
+                finish = Instantiate(FinishLinePrefab, new Vector3(0, 0, levelParameter.FinalPosition), Quaternion.identity, Stack);
+            }
+            else
+            { 
+                param = levelParameter;
+                finish = Instantiate(FinishLinePrefab, new Vector3(0, 0, levelParameter.FinalPosition), Quaternion.identity, Stack);
+                GetRandomStartingGradient();
+                currentPiece = CreateStartingPiece(0);
+            }
+        }
+        
+
+        private void OnGameReplay()
+        {
+            pieceCount = 0;
+            //first two object are starting piece and finish line
+            for (int i = Stack.childCount - 1; i >1; i--)
+            {
+                Destroy(Stack.GetChild(i).gameObject);
+            }
+        }
+        private void OnGameFail()
+        {
+            running = false;
+            currentPiece.DOKill();
+        }
+
+
         private void OnGameStart()
         {
             running = true;
@@ -55,17 +111,12 @@ namespace Case2
         {
             running = false;
         }
+        
 
-        private void CreateStartingPieces()
-        {
-            currentPiece = CreateNewPiece(0);
-            CreateNewPiece(-1);
-        }
-
-        private Transform CreateNewPiece(float posZ)
+        private Transform CreateStartingPiece(float offsetZ)
         {
             var go = Instantiate(PiecePrefab, Stack).transform;
-            go.localPosition = new Vector3(0,  param.Height / -2f, param.Length*posZ);
+            go.localPosition = new Vector3(0,  param.Height / -2f, param.Length*offsetZ);
             go.localScale = new Vector3(param.Width, param.Height, param.Length);
             go.GetComponent<MeshRenderer>().material.color = GetNewColor();
             return go;

@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Case2
 {
     [SerializeField]
-    public struct LevelParameter 
+    public struct LevelParameter
     {
         public float Width;
         public float Height;

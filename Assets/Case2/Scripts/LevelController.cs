@@ -1,10 +1,10 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace Case2
 {
     public class LevelController : MonoBehaviour
     {
-        public Transform Stack;
         public float PieceWidth;
         public float PieceHeight;
         public float PieceLength;
@@ -28,11 +28,13 @@ namespace Case2
         private void OnEnable()
         {
             EventBus.OnContinue += OnContinueNewLevel;
+            EventBus.OnGameFail += OnGameFail;
         }
 
         private void OnDisable()
         {
             EventBus.OnContinue -= OnContinueNewLevel;
+            EventBus.OnGameFail -= OnGameFail;
         }
         private void Start()
         {
@@ -60,17 +62,14 @@ namespace Case2
         private void LoadLevel()
         {
             LevelParameter levelParameter = GetDifficulty();
-            var finalPosition = new Vector3(0, 0, (PieceLength * levelParameter.PieceCount)+PieceLength/2f+finishLength);
-            levelParameter.FinalPosition = finalPosition.z;
-            var finish= Instantiate(FinishLinePrefab, finalPosition, Quaternion.identity,Stack);
-            
+            levelParameter.FinalPosition =(PieceLength * levelParameter.PieceCount)+PieceLength/2f+finishLength;
             EventBus.OnLevelNumberChanged?.Invoke(level);
             EventBus.OnLevelReady?.Invoke(levelParameter);
         }
 
         private LevelParameter GetDifficulty()
         {
-            var t = Mathf.InverseLerp(0, MaxLevel, level);
+            var t = (float)level / MaxLevel;
             var pieceCount = Mathf.Lerp(PieceCountMin, PieceCountMax, PieceCountCurve.Evaluate(t));
             var speed = Mathf.Lerp(SpeedMin, SpeedMax, SpeedCurve.Evaluate(t));
             LevelParameter levelParameter = new LevelParameter()
@@ -83,6 +82,16 @@ namespace Case2
                 PieceCount = Mathf.CeilToInt(pieceCount),
             };
             return levelParameter;
+        }
+
+        private void OnGameFail()
+        {
+            DOVirtual.DelayedCall(5, TriggerReplay);
+        }
+
+        private void TriggerReplay()
+        {
+            EventBus.OnGameReplay?.Invoke();
         }
     }
 }

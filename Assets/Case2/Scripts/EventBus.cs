@@ -7,6 +7,7 @@ namespace Case2
     {
         public static Action OnGameStart;
         public static Action OnGameFail;
+        public static Action OnGameReplay;
         public static Action OnGameSuccess;
         public static Action OnContinue;
         public static Action OnGameEnd;

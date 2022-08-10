@@ -9,6 +9,7 @@ namespace Case2
         private static readonly int DanceTrigger = Animator.StringToHash("Dance");
         private static readonly int PrepareRunTrigger = Animator.StringToHash("PrepareRun");
         private static readonly int FailTrigger = Animator.StringToHash("Fail");
+        private static readonly int IdleTrigger = Animator.StringToHash("Idle");
 
         public void Run()
         {
@@ -29,6 +30,9 @@ namespace Case2
             animator.SetTrigger(FailTrigger);
         }
 
-
+        public void Idle()
+        {
+            animator.SetTrigger(IdleTrigger);
+        }
     }
 }
