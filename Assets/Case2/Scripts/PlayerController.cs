@@ -66,7 +66,6 @@ namespace Case2
 
         private void OnGameStart()
         {
-            Model.PrepareRun();
             DOVirtual.DelayedCall(param.Speed/2f, StartMoving);
         }
 

@@ -20,7 +20,7 @@ namespace Case2
         private float spawnXDistance;
         private Transform currentPiece;
         private Transform prevPiece;
-        private bool running;
+        private bool inputEnabled;
         private TweenerCore<Vector3, Vector3, VectorOptions> tween;
         private LevelParameter param;
         private GameObject finish;
@@ -87,29 +87,31 @@ namespace Case2
         private void OnGameReplay()
         {
             pieceCount = 0;
-            //first two object are starting piece and finish line
+            //first two object are finish line and starting piece respectively
             for (int i = Stack.childCount - 1; i >1; i--)
             {
                 Destroy(Stack.GetChild(i).gameObject);
             }
+
+            currentPiece = Stack.GetChild(1);
         }
         private void OnGameFail()
         {
-            running = false;
+            inputEnabled = false;
             currentPiece.DOKill();
         }
 
 
         private void OnGameStart()
         {
-            running = true;
+            inputEnabled = true;
             spawnXDistance = param.Width;
             CreateNewPiece();
 
         }
         private void OnGameEnd()
         {
-            running = false;
+            inputEnabled = false;
         }
         
 
@@ -135,8 +137,7 @@ namespace Case2
             piece.localPosition = startingPosition;
             piece.GetComponent<MeshRenderer>().material.color = GetNewColor();
             tween = piece.DOLocalMoveX(-startingPosition.x, param.Speed)
-                .SetEase(PieceMovementCurve)
-                .OnComplete(OnPieceMoved);
+                .SetEase(PieceMovementCurve);
             prevPiece = currentPiece;
             currentPiece = piece;
         }
@@ -145,16 +146,7 @@ namespace Case2
         {
             return Random.value > 0.5f? 1:-1;
         }
-        private void OnPieceMoved()
-        {
-            //fail trigger
-            if (pieceCount >= param.PieceCount)
-            {
-                return;
-            }
-            CreateNewPiece();
-        }
-
+        
         private void OnPiecePlaced()
         {
             if (pieceCount >= param.PieceCount)
@@ -162,20 +154,24 @@ namespace Case2
                 return;
             }
 
-            running = true;
             CreateNewPiece();
+            inputEnabled = true;
         }
 
         private void Update()
         {
-            if(!running)
+            if(!inputEnabled)
                 return;
             if (!Input.GetMouseButtonDown(0)) 
                 return;
-            
-            running = false;
-            var remainingTime = tween.Duration() - tween.Elapsed();
-            tween.Kill();
+            inputEnabled = false;
+            var remainingTime = 0f;
+            if (tween.active)
+            {
+                remainingTime = tween.Duration() - tween.Elapsed();
+                tween.Kill();
+            }
+
             var currentPosition= currentPiece.localPosition;
             var currentScale = currentPiece.localScale;
             var prevPosition = prevPiece.localPosition;
@@ -191,7 +187,7 @@ namespace Case2
             }
             else if(absoluteWidthDifference>currentScale.x)//early/late tap (out of bounds)
             {
-                prevPosition.z += param.Length/ 2f;
+                //prevPosition.z += param.Length/ 2f;
             }
             else
             {
