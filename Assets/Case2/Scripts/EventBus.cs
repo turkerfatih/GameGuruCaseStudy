@@ -10,9 +10,8 @@ namespace Case2
         public static Action OnGameReplay;
         public static Action OnGameSuccess;
         public static Action OnContinue;
-        public static Action OnGameEnd;
+        public static Action<Placement> OnPiecePlaced;
         public static Action<LevelParameter> OnLevelReady;
-        public static Action OnStopPlayer;
         public static Action<int> OnLevelNumberChanged;
     }
 }

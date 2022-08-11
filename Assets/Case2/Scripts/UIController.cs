@@ -21,7 +21,6 @@ namespace Case2
         {
             EventBus.OnLevelReady += OnLevelGenerated;
             EventBus.OnGameFail += OnFail;
-            EventBus.OnGameEnd += OnEnd;
             EventBus.OnLevelNumberChanged += ShowLevel;
             EventBus.OnGameStart += OnGameStart;
             EventBus.OnGameSuccess += OnSuccess;
@@ -31,8 +30,7 @@ namespace Case2
         private void OnDisable()
         {
             EventBus.OnLevelReady -= OnLevelGenerated;
-            EventBus.OnGameFail -= OnFail; 
-            EventBus.OnGameEnd -= OnEnd;
+            EventBus.OnGameFail -= OnFail;
             EventBus.OnLevelNumberChanged -= ShowLevel;
             EventBus.OnGameStart -= OnGameStart;
             EventBus.OnGameSuccess -= OnSuccess;
@@ -59,11 +57,7 @@ namespace Case2
         {
             FailPanel.SetActive(true);
         }
-
-        private void OnEnd()
-        {
-            FailPanel.SetActive(false);
-        }
+        
         private void ShowLevel(int levelNumber)
         {
             LevelNumber.text = "Level "+levelNumber;

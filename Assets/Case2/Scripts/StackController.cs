@@ -40,14 +40,12 @@ namespace Case2
         {
             EventBus.OnLevelReady += OnLevelReady;
             EventBus.OnGameStart += OnGameStart;
-            EventBus.OnGameEnd += OnGameEnd;
             EventBus.OnGameReplay += OnGameReplay;
             EventBus.OnGameFail += OnGameFail;
         }
         private void OnDisable()
         {
             EventBus.OnGameStart-= OnGameStart;
-            EventBus.OnGameEnd -= OnGameEnd;
             EventBus.OnLevelReady -= OnLevelReady;
             EventBus.OnGameReplay -= OnGameReplay;
         }
@@ -110,12 +108,7 @@ namespace Case2
             CreateNewPiece();
 
         }
-        private void OnGameEnd()
-        {
-            inputEnabled = false;
-        }
         
-
         private Transform CreateStartingPiece(float offsetZ)
         {
             var go = Instantiate(PiecePrefab, Stack).transform;
@@ -185,6 +178,7 @@ namespace Case2
                 currentPosition.x = prevPosition.x;
                 currentPiece.localPosition = currentPosition;
                 DOVirtual.DelayedCall(remainingTime, OnPiecePlaced);
+                EventBus.OnPiecePlaced?.Invoke(Placement.Perfect);
             }
             else if(absoluteWidthDifference>currentScale.x)//early/late tap (out of bounds)
             {
@@ -192,6 +186,7 @@ namespace Case2
             }
             else
             {
+                EventBus.OnPiecePlaced?.Invoke(widthDifference<0 ? Placement.LeftCut: Placement.RightCut);
                 CutPiece(currentScale, absoluteWidthDifference, currentPosition, widthDifference, remainingTime);
             }
         }
