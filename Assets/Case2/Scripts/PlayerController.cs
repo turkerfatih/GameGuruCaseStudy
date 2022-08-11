@@ -11,16 +11,17 @@ namespace Case2
         public Transform Container;
         public Model Model;
         public bool AdaptChanges;
-
+        public float GroundCheckInterval;
         private LevelParameter param;
         private float playerSpeed;
-        private WaitForSeconds waitForAWhile = new WaitForSeconds(0.2f);
+        private WaitForSeconds waitForGroundCheckInterval;
         private bool running;
         private Rigidbody body;
 
         private void Awake()
         {
             body = Container.GetComponent<Rigidbody>();
+            waitForGroundCheckInterval = new WaitForSeconds(GroundCheckInterval);
         }
 
         private void OnEnable()
@@ -53,6 +54,10 @@ namespace Case2
         private void OnLevelReady(LevelParameter levelParameter)
         {
             param = levelParameter;
+            if (param.Speed < GroundCheckInterval)
+            {
+                GroundCheckInterval = param.Speed / 2f;
+            }
             ResetModel();
         }
         
@@ -124,13 +129,12 @@ namespace Case2
         {
             while (running)
             {
-                //Debug.DrawRay(Container.position+Vector3.up*param.Height/2f,Vector3.down*param.Height,Color.magenta,10);
                 if (!Physics.Raycast(Container.position+Vector3.up*param.Height/2f, Vector3.down, param.Height))
                 {
                     Mover.DOKill();
                     FailJump();
                 }
-                yield return waitForAWhile;
+                yield return waitForGroundCheckInterval;
             }
         }
 

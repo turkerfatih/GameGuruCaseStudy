@@ -12554,6 +12554,7 @@ MonoBehaviour:
   Container: {fileID: 548481396}
   Model: {fileID: 3002576899073718411}
   AdaptChanges: 1
+  GroundCheckInterval: 0.2
 --- !u!4 &1954608148
 Transform:
   m_ObjectHideFlags: 0
@@ -13924,7 +13925,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   PieceCountMin: 5
-  PieceCountMax: 100
+  PieceCountMax: 20
   PieceCountCurve:
     serializedVersion: 2
     m_Curve:
@@ -14934,11 +14935,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4043731920028994848, guid: c3514cfc63363ca45a25a12f4d963a66, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.000000060351105
+      value: 0.000000026258462
       objectReference: {fileID: 0}
     - target: {fileID: 4043731920028994848, guid: c3514cfc63363ca45a25a12f4d963a66, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0000000082897404
+      value: 0.0000000036068228
       objectReference: {fileID: 0}
     - target: {fileID: 4043731920028994848, guid: c3514cfc63363ca45a25a12f4d963a66, type: 3}
       propertyPath: m_LocalRotation.y

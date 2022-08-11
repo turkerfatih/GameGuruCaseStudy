@@ -17,7 +17,7 @@ namespace Case2
         public GameObject FinishLinePrefab;
         public float CuttedPieceDestroyDelay;
         public List<PairGradient> Gradients;
-        
+
         private float spawnXDistance;
         private Transform currentPiece;
         private Transform prevPiece;
@@ -43,57 +43,54 @@ namespace Case2
             EventBus.OnGameReplay += OnGameReplay;
             EventBus.OnGameFail += OnGameFail;
         }
+
         private void OnDisable()
         {
-            EventBus.OnGameStart-= OnGameStart;
+            EventBus.OnGameStart -= OnGameStart;
             EventBus.OnLevelReady -= OnLevelReady;
             EventBus.OnGameReplay -= OnGameReplay;
         }
-        
+
         private void OnLevelReady(LevelParameter levelParameter)
         {
-            SetupStack(levelParameter);
-        }
-
-        private void SetupStack(LevelParameter levelParameter)
-        {
             pieceCount = 0;
-            if (Stack.childCount > 1)// previously completed a level
+            if (Stack.childCount > 1) // previously completed a level
             {
                 for (int i = Stack.childCount - 1; i >= 0; i--)
                 {
-                    Stack.GetChild(i).SetParent(StackPrevious,true);
+                    Stack.GetChild(i).SetParent(StackPrevious, true);
                 }
 
-                var previousPos= StackPrevious.localPosition;
+                var previousPos = StackPrevious.localPosition;
                 var gap = finishLength + levelParameter.Length / 2f;
                 previousPos.z -= param.FinalPosition + gap;
                 StackPrevious.localPosition = previousPos;
                 param = levelParameter;
                 currentPiece = CreateStartingPiece(0);
-                finish = Instantiate(FinishLinePrefab, new Vector3(0, 0, levelParameter.FinalPosition), Quaternion.identity, Stack);
+                finish = Instantiate(FinishLinePrefab, new Vector3(0, 0, levelParameter.FinalPosition),
+                    Quaternion.identity, Stack);
             }
-            else
-            { 
+            else // new load
+            {
                 param = levelParameter;
-                finish = Instantiate(FinishLinePrefab, new Vector3(0, 0, levelParameter.FinalPosition), Quaternion.identity, Stack);
+                finish = Instantiate(FinishLinePrefab, new Vector3(0, 0, levelParameter.FinalPosition),
+                    Quaternion.identity, Stack);
                 GetRandomStartingGradient();
                 currentPiece = CreateStartingPiece(0);
             }
         }
-        
-
         private void OnGameReplay()
         {
             pieceCount = 0;
             //first two object are finish line and starting piece respectively
-            for (int i = Stack.childCount - 1; i >1; i--)
+            for (int i = Stack.childCount - 1; i > 1; i--)
             {
                 Destroy(Stack.GetChild(i).gameObject);
             }
 
             currentPiece = Stack.GetChild(1);
         }
+
         private void OnGameFail()
         {
             inputEnabled = false;
@@ -106,28 +103,27 @@ namespace Case2
             inputEnabled = true;
             spawnXDistance = param.Width;
             CreateNewPiece();
-
         }
-        
+
         private Transform CreateStartingPiece(float offsetZ)
         {
             var go = Instantiate(PiecePrefab, Stack).transform;
-            go.localPosition = new Vector3(0,  param.Height / -2f, param.Length*offsetZ);
+            go.localPosition = new Vector3(0, param.Height / -2f, param.Length * offsetZ);
             go.localScale = new Vector3(param.Width, param.Height, param.Length);
             go.GetComponent<MeshRenderer>().material.color = GetNewColor();
             return go;
         }
-        
+
         private void CreateNewPiece()
         {
             pieceCount++;
-            var piece = Instantiate(currentPiece,Stack).transform;
+            var piece = Instantiate(currentPiece, Stack).transform;
             piece.name = "p" + pieceCount;
             var direction = GetRandomDirection();
-            var currentPos= currentPiece.localPosition;
+            var currentPos = currentPiece.localPosition;
             var currentScale = currentPiece.localScale;
-            var horizontalPosition = (spawnXDistance +currentScale.x/2f)*direction;
-            var startingPosition=new Vector3(horizontalPosition, currentPos.y,currentPos.z+currentScale.z);
+            var horizontalPosition = (spawnXDistance + currentScale.x / 2f) * direction;
+            var startingPosition = new Vector3(horizontalPosition, currentPos.y, currentPos.z + currentScale.z);
             piece.localPosition = startingPosition;
             piece.GetComponent<MeshRenderer>().material.color = GetNewColor();
             tween = piece.DOLocalMoveX(-startingPosition.x, param.Speed)
@@ -138,9 +134,9 @@ namespace Case2
 
         private float GetRandomDirection()
         {
-            return Random.value > 0.5f? 1:-1;
+            return Random.value > 0.5f ? 1 : -1;
         }
-        
+
         private void OnPiecePlaced()
         {
             if (pieceCount >= param.PieceCount)
@@ -154,9 +150,9 @@ namespace Case2
 
         private void Update()
         {
-            if(!inputEnabled)
+            if (!inputEnabled)
                 return;
-            if (!Input.GetMouseButtonDown(0)) 
+            if (!Input.GetMouseButtonDown(0))
                 return;
             inputEnabled = false;
             var remainingTime = 0f;
@@ -166,27 +162,28 @@ namespace Case2
                 tween.Kill();
             }
 
-            var currentPosition= currentPiece.localPosition;
+            var currentPosition = currentPiece.localPosition;
             var currentScale = currentPiece.localScale;
             var prevPosition = prevPiece.localPosition;
             var widthDifference = currentPosition.x - prevPosition.x;
             var absoluteWidthDifference = Mathf.Abs(widthDifference);
-            
-            
-            if (absoluteWidthDifference < param.ToleranceWidth)//perfect
+
+
+            if (absoluteWidthDifference < param.ToleranceWidth) //perfect
             {
                 currentPosition.x = prevPosition.x;
                 currentPiece.localPosition = currentPosition;
                 DOVirtual.DelayedCall(remainingTime, OnPiecePlaced);
                 EventBus.OnPiecePlaced?.Invoke(Placement.Perfect);
             }
-            else if(absoluteWidthDifference>currentScale.x)//early/late tap (out of bounds)
+            else if (absoluteWidthDifference > currentScale.x)
             {
-                //prevPosition.z += param.Length/ 2f;
+                //early or late tap (out of bounds)
+                //do nothing for now
             }
             else
             {
-                EventBus.OnPiecePlaced?.Invoke(widthDifference<0 ? Placement.LeftCut: Placement.RightCut);
+                EventBus.OnPiecePlaced?.Invoke(widthDifference < 0 ? Placement.LeftCut : Placement.RightCut);
                 CutPiece(currentScale, absoluteWidthDifference, currentPosition, widthDifference, remainingTime);
             }
         }
@@ -209,8 +206,8 @@ namespace Case2
             var body = cutPiece.GetComponent<Rigidbody>();
             body.useGravity = true;
             body.isKinematic = false;
-            body.AddForce(new Vector3(cutDirection*param.Length,0,0), ForceMode.Impulse);
-            Destroy(cutPiece.gameObject,CuttedPieceDestroyDelay);
+            body.AddForce(new Vector3(cutDirection * param.Length, 0, 0), ForceMode.Impulse);
+            Destroy(cutPiece.gameObject, CuttedPieceDestroyDelay);
             DOVirtual.DelayedCall(remainingTime, OnPiecePlaced);
         }
 
@@ -223,6 +220,7 @@ namespace Case2
                 sourceColor = targetColor.Pair;
                 targetColor = sourceColor.PairGradients[Random.Range(0, sourceColor.PairGradients.Count)];
             }
+
             return Color.Lerp(sourceColor.Color, targetColor.Pair.Color, colorCount / targetColor.Length);
         }
 
