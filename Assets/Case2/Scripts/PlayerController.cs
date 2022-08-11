@@ -10,6 +10,7 @@ namespace Case2
         public Transform Mover;
         public Transform Container;
         public Model Model;
+        public bool AdaptChanges;
 
         private LevelParameter param;
         private float playerSpeed;
@@ -28,15 +29,16 @@ namespace Case2
             EventBus.OnLevelReady+= OnLevelReady;
             EventBus.OnContinue += OnNewLevelRequest;
             EventBus.OnGameReplay += OnGameReplay;
+            EventBus.OnPathChange += OnPathChange;
         }
         
-
         private void OnDisable()
         {
             EventBus.OnGameStart -= OnGameStart;
             EventBus.OnLevelReady -= OnLevelReady;
             EventBus.OnContinue -= OnNewLevelRequest;
-            EventBus.OnGameReplay += OnGameReplay;
+            EventBus.OnGameReplay -= OnGameReplay;
+            EventBus.OnPathChange -= OnPathChange;
         }
         private void ResetModel()
         {
@@ -52,6 +54,13 @@ namespace Case2
         {
             param = levelParameter;
             ResetModel();
+        }
+        
+        private void OnPathChange(float xPosition)
+        {
+            if(!AdaptChanges)
+                return;
+            Mover.DOLocalMoveX(xPosition, param.Speed / 2f);
         }
 
         private void OnGameReplay()

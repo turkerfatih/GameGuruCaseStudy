@@ -12553,6 +12553,7 @@ MonoBehaviour:
   Mover: {fileID: 1637439058}
   Container: {fileID: 548481396}
   Model: {fileID: 3002576899073718411}
+  AdaptChanges: 1
 --- !u!4 &1954608148
 Transform:
   m_ObjectHideFlags: 0

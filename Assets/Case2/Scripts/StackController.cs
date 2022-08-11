@@ -198,7 +198,7 @@ namespace Case2
             currentPiece.localScale = new Vector3(cutWidth, currentScale.y, currentScale.z);
             var centeredPositionX = currentPosition.x - widthDifference / 2f;
             currentPiece.localPosition = new Vector3(centeredPositionX, currentPosition.y, currentPosition.z);
-
+            EventBus.OnPathChange?.Invoke(centeredPositionX);
             var cutPiece = Instantiate(currentPiece, Stack);
             var cutScale = cutPiece.localScale;
             cutScale.x = absWidthDifference;

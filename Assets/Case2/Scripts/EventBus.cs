@@ -11,6 +11,7 @@ namespace Case2
         public static Action OnGameSuccess;
         public static Action OnContinue;
         public static Action<Placement> OnPiecePlaced;
+        public static Action<float> OnPathChange;
         public static Action<LevelParameter> OnLevelReady;
         public static Action<int> OnLevelNumberChanged;
     }
